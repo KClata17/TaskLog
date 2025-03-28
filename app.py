@@ -54,5 +54,23 @@ def user_detail():
     allregister = user_register.query.all()
     return render_template('userdetail.html', allregister=allregister)
 
+@app.route('/updateuser/<int:user_id>', methods =['POST', 'GET'])
+def updateuser(user_id):
+    if request.method=="POST":
+        name = request.form['name']
+        email = request.form['email']
+        password = request.form['password']
+        
+        register_user = user_register.query.filter_by(user_id=user_id).first()
+        register_user.name = name
+        register_user.email =email
+        register_user.password = password
+        db.session.add(register_user)
+        db.session.commit()
+        return redirect('/userdetail')
+    register_user = user_register.query.filter_by(user_id=user_id).first()
+    return render_template('updateuser.html', register_user=register_user)
+        
+
 if __name__ == '__main__':
     app.run(debug=True) 

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block body %}
+  
+  
+  <div class ="container my-3" >
+    <h1> Update User-Data</h1>
+    <form action ="/updateuser/{{register_user.user_id}}" method = "POST" class="row g-3">
+      <div class="col-md-6">
+        <label for="fullname" class="form-label">User Full Name</label>
+        <input type="text" class="form-control" name="name" value ="{{register_user.name}}" id="name" placeholder="Full Name">
+      </div>
+      <div class="col-md-6">
+        <label for="email" class="form-label">Email</label>
+        <input type="text" class="form-control" name="email" value ="{{register_user.email}}" id="email" placeholder="@gmail.com">
+      </div>
+      <div class="col-6">
+        <label for="password" class="form-label">Password</label>
+        <input type="Password" class="form-control" name="password" value ="{{register_user.password}}" id="password" placeholder="*****">
+      </div>
+      
+      
+      
+      <div class="col-12">
+        <button type="submit" class="btn btn-primary">Update</button>
+        <button type="Exit" class="btn btn-primary">Exit</button>
+      </div>
+    </form>
+{% endblock body %}
