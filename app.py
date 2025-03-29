@@ -1,8 +1,10 @@
+import re
 from flask import Flask, render_template, request, redirect, session, url_for,flash
 from sqlalchemy import create_engine, Column, Integer, String, DateTime
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 import bcrypt
+from werkzeug.security import generate_password_hash
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///TaskLog_database.db"
@@ -32,6 +34,13 @@ class user_register(db.Model):
 
 with app.app_context():
     db.create_all()        
+
+#email validation
+def is_valid_email(email):
+    email_pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+    return re.match(email_pattern, email)
+
+
 @app.route('/')
 def home():
     return render_template("home.html")
@@ -42,10 +51,25 @@ def register():
         name = request.form['name']
         email = request.form['email']
         password = request.form['password']
+        if not is_valid_email(email):
+            flash("Invalid Email formart! Please enter valid email.", "danger")
+            return redirect(url_for('register'))
         
-        register_user = user_register(name=name, email=email, password=password)
+        
+        existing_user = user_register.query.filter_by(email=email).first()
+        if existing_user:
+            flash("Email already registered! Please login","danger")
+            return redirect(url_for('register'))
+        
+        #Hash Password befoe storing(Security Purpose)
+        hashed_password = generate_password_hash(password)
+        
+        register_user = user_register(name=name, email=email, password=hashed_password)
         db.session.add(register_user)
         db.session.commit()
+        
+        flash("Registration Successful!", "success")
+        return redirect(url_for('register'))
     allregister = user_register.query.all()
     return render_template("user.html", allregister=allregister)
 
@@ -70,6 +94,14 @@ def updateuser(user_id):
         return redirect('/userdetail')
     register_user = user_register.query.filter_by(user_id=user_id).first()
     return render_template('updateuser.html', register_user=register_user)
+
+@app.route('/delete_userdata/<int:user_id>')
+def delete_userdata(user_id):
+    register_user= user_register.query.filter_by(user_id=user_id).first()
+    db.session.delete(register_user)
+    db.session.commit()
+    return redirect('/userdetail')
+
         
 
 if __name__ == '__main__':
