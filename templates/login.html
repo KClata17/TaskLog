@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block body %}
+<div class= "container my-3 d-flex justify-content-center ">
+<div class ="login-box shadow-lg p-4 bg-white rounded" >
+    <h1 class="text-center"> Login </h1>
+
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }} text-center">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+
+    <form  action="/login" method="POST">
+      <div class="mb-3">
+    <label for="email" class="form-label">Email:</label>
+    <div class="input-group has-validation">
+    <span class="input-group-text" id="inputGroupPrepend3">@</span>
+    <input type="text" class="form-control" id="email" name="email" required placeholder="...@gmail.com">
+      
+    </div>
+  </div>
+<div class ="mb-3" >
+   
+    <label for="password" class="form-label">Password:</label>
+    <div class="input-group has-validation">
+    <span class="input-group-text" id="inputGroupPrepend3">*</span>  
+    <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+    </div>
+  
+  </div>
+        <div class ="text-center mt-4" >  
+        <button type="submit" value= "Login" class="btn btn-primary">Login</button>
+        <a href ='/user_reg' class="btn btn-primary">Register</a>
+        <a href ="/" class="btn btn-secondary" data-bs-dismiss="modal">Close</a>
+          </div>
+      </form>
+  </div>
+</div>
+
+
+
+
+{% endblock body %}
