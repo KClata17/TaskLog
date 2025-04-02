@@ -23,7 +23,10 @@
                 
                 <th scope='col'> Task created</th>
                 <th scope='col'> Action</th>
-                <th scope="col">Status</th>
+                <th scope="col">
+                    <input type="checkbox" id="selectAll" onclick="toggleCheckboxes(this)">
+                    Status
+                </th>
                 
             </tr>
             </thead>
@@ -34,13 +37,19 @@
             <th scope="row">{{loop.index}}</th>
             <td>{{Task_log.user_id}}</td>
             <td>{{Task_log.title}}</td>
-            <td>{{Task_log.description}}</td>
-            
+            <td>{{Task_log.description}}</td>          
             <td>{{Task_log.task_created}}</td>
-            
+
             <td>
                 <a href="/updateuser/{{Task_log.task_id}}" type="button" class="btn btn-outline-success btn-sm mx-1">Update</button>
                 <a href="/delete_userdata/{{Task_log.task_id}}" type="button" class="btn btn-outline-warning btn-sm mx-1">Delete</button>
+            </td>
+            
+           
+            
+            
+            <td>
+                <input type ="checkbox" class "statusCheckbox" data-task-id="{{Task_log.task_id}}"{% if Task_log.status == 'done' %} checked{% endif %}>
             </td>
         </tr>
         {% endfor %}
@@ -51,6 +60,31 @@
         
         
 </div>
+<script>
+    function toggleCheckboxes(source){
+        let checkboxes = document.querySelectorAll('. statusCheckbox');
+        checkboxes.forEach(checkbox=> {
+            checkbox.checked = source.checked;
+            updateTaskStatus(checkbox.dataset.taskId, checkbox.checked)
+        });
+    }
+    document.querySelectorAll('.statusCheckbox').forEach(checkbox => {
+        checkbox.addEventListener('change', function(){
+            updateTaskStatus(this.dataset.taskId, this.checked);
+        });
+    });
+    function updateTaskStatus(taskId, isChecked){
+        fetch('/upda_task_status', {
+            method 'POST'
+            header: {'Content-Type': 'application/json'}
+            body: JSON.stringify({ task_id: taskId, status: isChecked ? 'done' : 'pending' })
+
+        })
+        .then(response => response.json)
+        .then(data => console.log(data))
+        .catch (error => console.log ('Error: ', error))
+    }
+</script>
   <!-- Optional JavaScript; choose one of the two! -->
 
     <!-- Option 1: Bootstrap Bundle with Popper -->

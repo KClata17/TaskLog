@@ -1,5 +1,5 @@
 import re
-from flask import Flask, render_template, request, redirect, session, url_for,flash
+from flask import Flask, render_template, request, redirect, session, url_for,flash, jsonify
 from sqlalchemy import create_engine, Column, Integer, String, DateTime
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
@@ -216,7 +216,19 @@ def logout():
     return redirect(url_for('user_login'))
 
         
-
+@app.route('/update_task_status', methods =['POST'])
+def update_task_status():
+    data = request.json
+    task_id = data.get("task_id")
+    status = data.get("status")
+    
+    task = Task_log.query.get(task_id)
+    if task:
+        task.status = status
+        db.session.commit()
+        return jsonify({"message": "Task status updated", "task_id": task_id, "status": status})
+    return jsonify({'error': "Task not found"}), 404
+        
 
 
 if __name__ == '__main__':
