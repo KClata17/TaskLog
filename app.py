@@ -3,6 +3,8 @@ from flask import Flask, render_template, request, redirect, session, url_for,fl
 from sqlalchemy import create_engine, Column, Integer, String, DateTime
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import joinedload
+
 import bcrypt
 from werkzeug.security import generate_password_hash
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
@@ -58,11 +60,21 @@ class Task_log(db.Model):
     title = db.Column(db.String(200), nullable = False)
     description = db.Column(db.String(700), nullable = False)
     task_created = db.Column(db.DateTime, default = datetime.utcnow)
+    status = db.Column(db.String(50), default ="Pending")
+    
+    categories = db.relationship('task_catagories', backref='task', lazy=True)
     
     def __repr__(self) -> str:
         return f"{self.task_id} - {self.title}"
 
-
+class task_catagories(db.Model):
+    __tablename__ ='task_catagories'
+    cat_id = db.Column(db.Integer, primary_key=True)
+    category_type = db.Column(db.String(50), nullable= False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user_register.user_id'), nullable=False)
+    task_id = db.Column(db.Integer, db.ForeignKey('TaskLog.task_id'), nullable=False)
+    def __repr__(self):
+        return f"{self.cat_id} - {self.category_type}"
     
 with app.app_context():
     db.create_all()        
@@ -188,15 +200,27 @@ def tasklog():
     if request.method =="POST":
         title = request.form['title']
         description = request.form['description']
+        category_type = request.form['category']
+        
         task_todo = Task_log(title = title, description=description, user_id =current_user.user_id)
         db.session.add(task_todo)
         db.session.commit()
+        
+        task_category = task_catagories(
+            task_id = task_todo.task_id,
+            user_id = current_user.user_id,
+            category_type= category_type
+        )
+        db.session.add(task_category)
+        db.session.commit()
         flash("Task added Successfully", "Success")
-    alltasklog = Task_log.query.filter_by(user_id=current_user.user_id).all()
-    #Debug: print the datas in terminal
-
-    # for task in alltasklog:
-    #     print(f"Task ID: {task.task_id}, tittle: {task.tittle}, Description: {task.description}, User:{task.user_id} ")
+        return redirect(url_for('tasklog'))
+    
+    alltasklog = (db.session.query(Task_log, task_catagories.category_type)
+                  .outerjoin(task_catagories, Task_log.task_id == task_catagories.task_id)
+                  .filter(Task_log.user_id == current_user.user_id)
+                  .all())
+    
     return render_template('tasklog.html', alltasklog=alltasklog)
 
 
@@ -204,8 +228,45 @@ def tasklog():
     
 @app.route('/tasklogdetail', methods =['GET', 'POST'])
 def tasklogdetails():
-    alltasklog=Task_log.query.all()
+    alltasklog = (
+        db.session.query(Task_log, task_catagories.category_type)
+        .outerjoin(task_catagories, Task_log.task_id == task_catagories.task_id)
+        .all()
+    )
     return render_template('tasklogdetail.html', alltasklog=alltasklog)
+
+@app.route('/update_tasklog/<int:task_id>', methods =['GET', 'POST'])
+def updatetasklog(task_id):
+    if request.method =='POST':
+        title = request.form['title']
+        description = request.form['description']
+        task_todo = Task_log.query.filter_by(task_id=task_id).first()
+        task_todo.title = title
+        task_todo.description = description
+        db.session.add(task_todo)
+        db.session.commit()
+        return redirect('/tasklogdetail')
+    task_todo = Task_log.query.filter_by(task_id=task_id).first()
+    return render_template('updatetasklog.html', task_todo=task_todo)
+
+@app.route('/delete_tasklog/<int:task_id>')
+def delete_tasklog(task_id):
+    task_todo = Task_log.query.filter_by(task_id=task_id).first()
+    db.session.delete(task_todo)
+    db.session.commit()
+    return redirect('/tasklogdetail')
+
+@app.route('/completed_task')
+@login_required
+def completed_task():
+    completed_task = Task_log.query.filter_by(status ='done').all()
+    return render_template('completed_task.html', alltasklog=completed_task)
+
+@app.route('/pending_task')
+def pending_task():
+    pending_task = Task_log.query.filter_by(status = 'pending').all()
+    return render_template('pending_tasks.html', alltasklog=pending_task)
+    
  
 @app.route('/logout')
 @login_required
@@ -218,18 +279,20 @@ def logout():
         
 @app.route('/update_task_status', methods =['POST'])
 def update_task_status():
-    data = request.json
-    task_id = data.get("task_id")
-    status = data.get("status")
+    data = request.get_json()
+    task_id = data['task_id']
+    new_status = data['status']
     
     task = Task_log.query.get(task_id)
     if task:
-        task.status = status
+        task.status = new_status
         db.session.commit()
-        return jsonify({"message": "Task status updated", "task_id": task_id, "status": status})
-    return jsonify({'error': "Task not found"}), 404
+        return jsonify({'status': 'success', 'message': 'Task status updated successfully'})
+    return jsonify({'status': 'error', 'message': 'Task not found'}), 404
         
 
+
+    
 
 if __name__ == '__main__':
     app.run(debug=True) 

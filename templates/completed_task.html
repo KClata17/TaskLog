@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block body %}
+
+<div class="container my-3">
+    <h2>Completed Tasks</h2>
+    <a href='/tasklogdetail' class="btn btn-outline-primary">Back to Task List</a>
+
+    {% if alltasklog|length == 0 %}
+        <div class="alert alert-secondary" role="alert">
+            No completed tasks found!
+        </div>        
+    {% else %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Task ID</th>
+                    <th scope="col">User ID</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Task Created</th>
+                    <th scope="col">Action</th>
+                    <th scope="col">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tasklog in alltasklog %}
+                    <tr>
+                        <th scope="row">{{ loop.index }}</th>
+                        <td>{{ tasklog.user_id }}</td>
+                        <td>{{ tasklog.title }}</td>
+                        <td>{{ tasklog.description }}</td>
+                        <td>{{ tasklog.task_created }}</td>
+                        <td>
+                            <a href="/update_tasklog/{{ tasklog.task_id }}" class="btn btn-outline-success btn-sm mx-1">Update</a>
+                            <a href="/delete_tasklog/{{ tasklog.task_id }}" class="btn btn-outline-warning btn-sm mx-1">Delete</a>
+                        </td>
+                        <td>
+                            <button class="btn btn-secondary btn-sm move-task" data-task-id="{{ tasklog.task_id }}" data-status="pending">
+                                Mark as Pending
+                            </button>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+</div>
+
+<script>
+    document.querySelectorAll('.move-task').forEach(button => {
+        button.addEventListener('click', function() {
+            let taskId = this.getAttribute('data-task-id');
+            let newStatus = this.getAttribute('data-status');
+
+            fetch('/update_task_status', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ task_id: taskId, status: newStatus })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                location.reload(); // Refresh the page to show updated status
+            })
+            .catch(error => console.log('Error:', error));
+        });
+    });
+</script>
+
+{% endblock body %}

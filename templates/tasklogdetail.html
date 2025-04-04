@@ -3,6 +3,7 @@
 
 <div class ="container my-3" >
     <h2> Track Your Task</h2>
+    <a href='/dashboard' class ="btn btn-outline-primary"> Back</a>
     {% if alltasklog|length==0 %}
     <div class="alert alert-secondary" role="alert">
         No data found! Please add your data.
@@ -20,36 +21,41 @@
                 <th scope="col">User ID</th>
                 <th scope="col">Title</th>
                 <th scope="col">Description</th>
+                <th scope='col'> Category</th> 
                 
                 <th scope='col'> Task created</th>
                 <th scope='col'> Action</th>
-                <th scope="col">
-                    <input type="checkbox" id="selectAll" onclick="toggleCheckboxes(this)">
-                    Status
-                </th>
+                <th scope="col">Status</th>
                 
             </tr>
             </thead>
             <tbody>
         
-            {% for Task_log in alltasklog %}
+            {% for Task_log, category_type in alltasklog %}
             <tr>
             <th scope="row">{{loop.index}}</th>
             <td>{{Task_log.user_id}}</td>
             <td>{{Task_log.title}}</td>
-            <td>{{Task_log.description}}</td>          
+            <td>{{Task_log.description}}</td>   
+            <td>{{category_type if category_type else "No Category" }}</td>       
             <td>{{Task_log.task_created}}</td>
 
             <td>
-                <a href="/updateuser/{{Task_log.task_id}}" type="button" class="btn btn-outline-success btn-sm mx-1">Update</button>
-                <a href="/delete_userdata/{{Task_log.task_id}}" type="button" class="btn btn-outline-warning btn-sm mx-1">Delete</button>
+                <a href="/update_tasklog/{{Task_log.task_id}}" type="button" class="btn btn-outline-success btn-sm mx-1">Update</a>
+                <a href="/delete_tasklog/{{Task_log.task_id}}" type="button" class="btn btn-outline-warning btn-sm mx-1">Delete</a>
             </td>
             
            
             
             
             <td>
-                <input type ="checkbox" class "statusCheckbox" data-task-id="{{Task_log.task_id}}"{% if Task_log.status == 'done' %} checked{% endif %}>
+                {% if Task_log.status == 'done' %}
+                    <button class ="btn btn-success btn-sm move-task" data-task-id="{{ Task_log.task_id }}" data-status="Pending"> Pending</button>
+                {% else %}
+                    <button class ="btn btn-success btn-sm move-task" data-task-id="{{ Task_log.task_id}}" data-status="Done"> Done</button>
+                {% endif %}
+
+
             </td>
         </tr>
         {% endfor %}
@@ -61,29 +67,28 @@
         
 </div>
 <script>
-    function toggleCheckboxes(source){
-        let checkboxes = document.querySelectorAll('. statusCheckbox');
-        checkboxes.forEach(checkbox=> {
-            checkbox.checked = source.checked;
-            updateTaskStatus(checkbox.dataset.taskId, checkbox.checked)
-        });
-    }
-    document.querySelectorAll('.statusCheckbox').forEach(checkbox => {
-        checkbox.addEventListener('change', function(){
-            updateTaskStatus(this.dataset.taskId, this.checked);
-        });
-    });
-    function updateTaskStatus(taskId, isChecked){
-        fetch('/upda_task_status', {
-            method 'POST'
-            header: {'Content-Type': 'application/json'}
-            body: JSON.stringify({ task_id: taskId, status: isChecked ? 'done' : 'pending' })
+   document.querySelectorAll('.move-task').forEach(button => {
+    button.addEventListener('click', function(){
+        let taskId = this.getAttribute('data-task-id');
+        let newStatus = this.getAttribute('data-status');
+        fetch ('/update_task_status', {
+            method ="POST",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                task_id: taskId,
+                status: newStatus
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data)
+            location.reload();
 
         })
-        .then(response => response.json)
-        .then(data => console.log(data))
-        .catch (error => console.log ('Error: ', error))
-    }
+        .catch(error => console.log('Error:', error));
+
+    });
+   });
 </script>
   <!-- Optional JavaScript; choose one of the two! -->
 

@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block body %}
 <h1>Task-Log Form</h1>
+<a href='/dashboard' class ="btn btn-outline-primary"> Back</a>
 <div class ="container my-3" >
     <h2> FeedBack</h2>
     <form action ="/tasklog" method = "POST">
@@ -13,7 +14,16 @@
         <label for="desc" class="form-label">Description:  </label>
         <textarea class="form-control" name= "description" id="description" rows="3"></textarea>
       </div>
-      
+
+      <div class ="mb-3">
+        <label for "category" class = "form-label"> Category: </label>
+        <select class = "form-control" name ="category" id="category" required>
+          <option value =""> -- Select Category --</option>
+          <option value="Personal">Personal</option>
+          <option value ="Work"> Work</option>
+        </select>
+      </div>
+
       <button type="submit" class="btn btn-outline-success"> submit</button>
     </form>
   </div>
