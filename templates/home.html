@@ -1,8 +1,68 @@
 {% extends "base.html" %}
 {% block body %}
-<div class="md-3">
-    <a href= "/user_reg" class ="btn btn-outline-primary" > Create User</a>
-    <a href= "/userdetail" class ="btn btn-outline-primary" > User Detail</a>
-    <a href= "/login" class ="btn btn-outline-primary" > Login</a>
-</div>
+
+
+
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-overlay">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-md-6 text-white">
+            <h1 class="display-4 font-weight-bold">Track Your Data, Get regular Updated</h1>
+            <p class="lead">Task tracking helps you focus on what matters, saves time, and makes you more efficient. It keeps you organized and allows you to see what needs to be done and when.  </p>
+          </div>
+          <div class="col-md-5 offset-md-1">
+            <div class="form-box">
+              <form action="/login" method="POST">
+                <h3> Login</h3>
+                <div class="form-group">
+                  <label>Email</label>
+                  <input type="text" class="form-control" id="email" name="email" required placeholder=" Enter your ...@gmail.com">
+                </div>
+                <div class="form-group">
+                  <label>Password</label>
+                  <input type="password" class="form-control" id="password" name="password" placeholder="Enter your **** Password">
+                </div>
+                <div class="form-group">
+                  <label>Repeat password</label>
+                  <input type="password" class="form-control" id="password" name="password" placeholder="Repeat **** Password">
+                </div>
+                <div class= "text-center mt-3">
+                <button type="submit" value= "Login" class="btn btn-success btn-block">Sign up</button>
+                </div>
+                <p class="text-center mt-2">Already have an account? <a href="/user_reg">Sign in</a></p>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Features Section -->
+  <section class="features text-center bg-light">
+    <div class="container">
+      <h2 class="mb-4 font-weight-bold">Creative & flexible Bootstrap UI Kit</h2>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="icon mb-3">📦</div>
+          <h5 class="font-weight-bold">Bootstrap 4</h5>
+          <p>With mobile, tablet & desktop support it doesn’t matter what device you’re using. Robust is responsive in all browsers.</p>
+        </div>
+        <div class="col-md-4">
+          <div class="icon mb-3">📱</div>
+          <h5 class="font-weight-bold">Mobile friendly</h5>
+          <p>Robust works perfectly with: Chrome, Firefox, Safari, Opera and IE 10+. We're working hard to support them.</p>
+        </div>
+        <div class="col-md-4">
+          <div class="icon mb-3">💬</div>
+          <h5 class="font-weight-bold">Premium support</h5>
+          <p>Robust is supported by specialists who provide quick and effective support. Usually an email reply takes &lt;24h.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
 {% endblock body %}

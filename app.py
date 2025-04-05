@@ -213,7 +213,7 @@ def tasklog():
         )
         db.session.add(task_category)
         db.session.commit()
-        flash("Task added Successfully", "Success")
+        flash("Task added Successfully", "success")
         return redirect(url_for('tasklog'))
     
     alltasklog = (db.session.query(Task_log, task_catagories.category_type)
@@ -274,7 +274,7 @@ def logout():
     logout_user()
     session.clear()
     flash("Logged out successfully!", "success")
-    return redirect(url_for('user_login'))
+    return redirect(url_for('home'))
 
         
 @app.route('/update_task_status', methods =['POST'])
