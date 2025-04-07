@@ -2,29 +2,56 @@
 {% block body %}
 
 
-<div class="container my-3 d-flex justify-content-center">
-  <div class ="register-box shadow-lg p-4 bg-white rounded" >
-    <h1 class= "text-center"> Register new user</h1>
+<div class="container my-5">
+  <div class="row align-items-center">
+    <!-- Left Side: Content & Spinners -->
+    <div class="col-md-6 text-center">
+      <h2 class="mb-4">Welcome to Our TaskLog Platform!</h2>
+      <p class="lead">Create your account to access exclusive features and stay connected.</p>
 
-    <form action ="/user_reg" method = "POST" class="row g-3" onsubmit="return validateEmail()" >
-      <div class="mb-3">
-        <label for="fullname" class="form-label">Username</label>
-        <input type="text" class="form-control" name="name" id="name"  placeholder="Full Name" required>
+      <!-- Bootstrap Spinners -->
+      <div class="d-flex justify-content-center gap-3 my-4">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <div class="spinner-border text-success" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <div class="spinner-border text-danger" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
       </div>
-      <div class="mb-3">
-        <label for="email" class="form-label">Email</label>
-        <input type="text" class="form-control" name="email" id="email" placeholder="@gmail.com" required>
-      </div>
-      <div class="mb-3">
-        <label for="password" class="form-label">Password</label>
-        <input type="Password" class="form-control" name="password" id="password" placeholder="*****" required>
-      </div>
-      <div class="text-center mt-4">
-        <button type="submit" class="btn btn-primary">Register</button>
-        <a href= '/login' class="btn btn-primary">Login</a> 
-        <a href ="/" class="btn btn-secondary" data-bs-dismiss="modal">Close</a>
-      </div>
-    </form>
+
+      <p class="text-muted">Fast, secure, and user-friendly experience!</p>
+    </div>
+
+
+  <!--User register Form start from here-->
+    <div class="col-md-6">
+    <div class ="register-box shadow-lg p-4 bg-white rounded" >
+      <h1 class= "text-center"> Register new user</h1>
+
+      <form action ="/user_reg" method = "POST" class="row g-3" onsubmit="return validateEmail()" >
+        <div class="mb-3">
+          <label for="fullname" class="form-label">Username</label>
+          <input type="text" class="form-control" name="name" id="name"  placeholder="Full Name" required>
+        </div>
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input type="text" class="form-control" name="email" id="email" placeholder="@gmail.com" required>
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input type="Password" class="form-control" name="password" id="password" placeholder="*****" required>
+        </div>
+        <div class="text-center mt-4">
+          <button type="submit" class="btn btn-primary">Register</button>
+          <a href= '/' class="btn btn-primary">Exit</a> 
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
     <script>
       function validateEmail() {
         let emailField = document.getElementById("email").value;

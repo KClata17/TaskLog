@@ -235,19 +235,28 @@ def tasklogdetails():
     )
     return render_template('tasklogdetail.html', alltasklog=alltasklog)
 
-@app.route('/update_tasklog/<int:task_id>', methods =['GET', 'POST'])
+@app.route('/update_tasklog/<int:task_id>', methods=['GET', 'POST'])
 def updatetasklog(task_id):
-    if request.method =='POST':
+    task_todo = Task_log.query.filter_by(task_id=task_id).first()
+    
+    # Get category from query parameter (default to empty string)
+    category = request.args.get('category', '')
+
+    if request.method == 'POST':
         title = request.form['title']
         description = request.form['description']
-        task_todo = Task_log.query.filter_by(task_id=task_id).first()
         task_todo.title = title
         task_todo.description = description
-        db.session.add(task_todo)
         db.session.commit()
-        return redirect('/tasklogdetail')
-    task_todo = Task_log.query.filter_by(task_id=task_id).first()
+
+        # Redirect to category page if category provided, else to /tasklogdetail
+        if category:
+            return redirect(url_for('category_view', cat_type=category))
+        else:
+            return redirect('/tasklogdetail')
+
     return render_template('updatetasklog.html', task_todo=task_todo)
+
 
 @app.route('/delete_tasklog/<int:task_id>')
 def delete_tasklog(task_id):
@@ -290,6 +299,17 @@ def update_task_status():
         return jsonify({'status': 'success', 'message': 'Task status updated successfully'})
     return jsonify({'status': 'error', 'message': 'Task not found'}), 404
         
+@app.route('/category/<string:cat_type>')
+@login_required
+def view_by_category(cat_type):
+    tasks = (
+        db.session.query(Task_log, task_catagories.category_type)
+        .join(task_catagories, Task_log.task_id == task_catagories.task_id)
+        .filter(Task_log.user_id == current_user.user_id, task_catagories.category_type == cat_type)
+        .all()
+    )
+    return render_template('category_view.html', tasks=tasks, cat_type=cat_type)
+
 
 
     

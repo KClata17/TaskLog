@@ -1,9 +1,34 @@
 {% extends "base.html" %}
 {% block body %}
-<h1>Task-Log Form</h1>
-<a href='/dashboard' class ="btn btn-outline-primary"> Back</a>
-<div class ="container my-3" >
-    <h2> FeedBack</h2>
+
+<div class="container my-5">
+  <div class="row align-items-center">
+    <!-- Left Side: Content & Spinners -->
+    <!-- Left Side: Enhanced Content -->
+    <div class="col-md-6 text-center p-4" style="background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-radius: 1rem;">
+      <h2 class="mb-3 fw-bold text-success">Welcome to TaskLog! ✅</h2>
+      <p class="lead">Stay organized. Stay productive.</p>
+
+      <div class="my-4">
+        <i class="bi bi-check-circle-fill text-primary fs-2"></i>
+        <i class="bi bi-calendar-event-fill text-warning fs-2 mx-3"></i>
+        <i class="bi bi-journal-text text-info fs-2"></i>
+      </div>
+
+      <blockquote class="blockquote mt-4">
+        <p class="mb-0 fst-italic">"The key to success is consistency in action."</p>
+        <footer class="blockquote-footer mt-2">TaskLog Team</footer>
+      </blockquote>
+
+      <p class="text-muted mt-4">Your productivity partner – anytime, anywhere.</p>
+    
+
+      <p class="text-muted">Fast, secure, and user-friendly experience!</p>
+    </div>
+
+<div class="col-md-6">
+  <div class ="register-box shadow-lg p-4 bg-white rounded" >
+    <h2 class= "text-center"> Task-Log Form</h2>
     <form action ="/tasklog" method = "POST">
 
     <div class="mb-3">
@@ -23,8 +48,11 @@
           <option value ="Work"> Work</option>
         </select>
       </div>
+      <div class="text-center mt-4">
 
       <button type="submit" class="btn btn-outline-success"> submit</button>
+      <a href='/dashboard' class ="btn btn-danger"> Exit</a>
+      </div>
     </form>
   </div>
 

@@ -1,11 +1,54 @@
 {% extends "base.html" %}
 {% block body %}
-<div class="md-3">
-    
-    <a href= "/tasklog" class ="btn btn-outline-primary" > Create TaskLog</a>
-    <a href= "/tasklogdetail" class ="btn btn-outline-primary" > Task Detail</a>
-    <a href= "/completed_task" class ="btn btn-outline-primary" > Completed Task</a>
-    <a href= "/logout" class ="btn btn-outline-primary" > Logout</a>
-
-</div>
+<div class="container my-5">
+    <div class="row">
+      
+      <!-- Left Side: Main Content -->
+      <div class="col-md-8">
+        <div class="p-4 bg-light rounded shadow-sm mb-4">
+          <h2 class="mb-3 text-primary fw-bold">👋 Welcome Back! 
+            <div class="spinner-border text-primary" role="status"></div>
+            <div class="spinner-border text-success" role="status"></div>
+            <div class="spinner-border text-warning" role="status"></div>
+          </h2>
+          <p class="lead">Manage your tasks efficiently and track your progress.</p>
+          
+  
+          <!-- Buttons for Navigation -->
+          <div class="my-4 d-flex flex-wrap gap-2">
+            <a href="/tasklog" class="btn btn-outline-primary">➕ Create TaskLog</a>
+            <a href="/tasklogdetail" class="btn btn-outline-secondary">📋 Task Detail</a>
+            <a href="/completed_task" class="btn btn-outline-success">✅ Completed Task</a>
+            <a href="/logout" class="btn btn-outline-danger">🚪 Logout</a>
+          </div>
+  
+          <!-- Progress Bar -->
+          <div class="mb-4">
+            <label class="form-label fw-semibold">Progress Overview</label>
+            <div class="progress" style="height: 25px;">
+              <div class="progress-bar bg-success" role="progressbar" style="width: 65%;" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100">65% Complete</div>
+            </div>
+          </div>
+  
+          <!-- Spinner Loading Style (just for flair) -->
+          
+        </div>
+      </div>
+  
+      <!-- Right Side: Button Group Panel -->
+      <div class="col-md-4">
+        <div class="bg-white p-4 rounded shadow-sm text-center">
+          <h4 class="text-secondary mb-4">Quick Filters</h4>
+          <div class="btn-group-vertical w-100" role="group" aria-label="Button group">
+            <a href="/tasklog?filter=all" class="btn btn-outline-dark">All Tasks</a>
+            <a href="/category/Work" class="btn btn-outline-primary">Work Tasks</a>
+            <a href="/category/Personal" class="btn btn-outline-success">Personal Tasks</a>
+            <a href="/tasklog?filter=pending" class="btn btn-outline-dark">Pending</a>
+            <a href="/tasklog?filter=completed" class="btn btn-outline-dark">Completed</a>
+          </div>
+        </div>
+      </div>
+  
+    </div>
+  </div>
 {% endblock body %}
