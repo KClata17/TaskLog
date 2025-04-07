@@ -151,3 +151,11 @@ nav{
   .col-md-6{
     color: black;
   }
+
+
+  .loginclass{
+    color: black;
+    text-align: center;
+    font-weight: bold;
+    font-style: italic;
+  }

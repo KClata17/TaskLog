@@ -229,8 +229,9 @@ def tasklog():
 @app.route('/tasklogdetail', methods =['GET', 'POST'])
 def tasklogdetails():
     alltasklog = (
-        db.session.query(Task_log, task_catagories.category_type)
+        db.session.query(Task_log, task_catagories.category_type,user_register.name)
         .outerjoin(task_catagories, Task_log.task_id == task_catagories.task_id)
+        .join(user_register, Task_log.user_id==user_register.user_id)
         .all()
     )
     return render_template('tasklogdetail.html', alltasklog=alltasklog)
@@ -268,7 +269,10 @@ def delete_tasklog(task_id):
 @app.route('/completed_task')
 @login_required
 def completed_task():
-    completed_task = Task_log.query.filter_by(status ='done').all()
+    completed_task = Task_log.query.filter_by(
+        status='done',
+        user_id=current_user.user_id
+    ).all()
     return render_template('completed_task.html', alltasklog=completed_task)
 
 @app.route('/pending_task')
@@ -286,18 +290,31 @@ def logout():
     return redirect(url_for('home'))
 
         
-@app.route('/update_task_status', methods =['POST'])
+@app.route('/update_task_status', methods=['POST'])
 def update_task_status():
     data = request.get_json()
-    task_id = data['task_id']
-    new_status = data['status']
-    
+    task_id = data.get('task_id')
+    status = data.get('status')
+
     task = Task_log.query.get(task_id)
+
     if task:
-        task.status = new_status
+        task.status = status.lower()  # Ensure lowercase for matching
+        print("Task found. Updating status to:", task.status)
         db.session.commit()
-        return jsonify({'status': 'success', 'message': 'Task status updated successfully'})
-    return jsonify({'status': 'error', 'message': 'Task not found'}), 404
+        # redirect based on status
+        if status.lower() == 'done':
+            print("Redirecting to completed_task")
+            return jsonify(success=True, redirect=url_for('completed_task'))
+        else:
+            print("Redirecting to pending_task")
+            return jsonify(success=True, redirect=url_for('pending_task'))
+        
+    print("Task not found!")
+    print(f"Updating Task ID {task_id} to status {status}")
+    return jsonify(success=False), 400
+
+
         
 @app.route('/category/<string:cat_type>')
 @login_required

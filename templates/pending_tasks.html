@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block body %}
+
+<div class="container my-3">
+    <h2>Pending Tasks</h2>
+    <a href="{{ url_for('dashboard') }}" class="btn btn-outline-primary mb-3">Back to Task Log</a>
+
+    {% if alltasklog|length == 0 %}
+        <div class="alert alert-warning">No pending tasks found.</div>
+    {% else %}
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Task ID</th>
+                    <th>User ID</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Task Created</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in alltasklog %}
+                <tr>
+                    <td>{{ task.task_id }}</td>
+                    <td>{{ task.user_id }}</td>
+                    <td>{{ task.title }}</td>
+                    <td>{{ task.description }}</td>
+                    <td>{{ task.task_created }}</td>
+                    <td><span class="badge bg-danger">{{ task.status }}</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+</div>
+
+{% endblock %}
