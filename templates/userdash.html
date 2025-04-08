@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="container mt-5 d-flex justify-content-center">
+    <div class="card shadow p-4" style="max-width: 500px; width: 100%;">
+        <div class="text-center">
+            <i class="bi bi-person-circle" style="font-size: 4rem; color: #007bff;"></i>
+            <h3 class="mt-3">Welcome, {{ user.name }}</h3>
+            <p class="text-muted">User Profile Overview</p>
+        </div>
+        <hr>
+        <div class="mt-3">
+            <p><strong>Name:</strong> {{ user.name }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Password:</strong> **********</p> <!-- Hidden password -->
+        </div>
+        <div class="text-center mt-4">
+            <a href="{{ url_for('updateuser', user_id=user.user_id) }}" class="btn btn-outline-primary w-100">
+                <i class="bi bi-pencil-square me-2"></i> Update Profile
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock body %}

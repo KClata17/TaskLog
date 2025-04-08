@@ -4,6 +4,7 @@ from sqlalchemy import create_engine, Column, Integer, String, DateTime
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import joinedload
+from functools import wraps
 
 import bcrypt
 from werkzeug.security import generate_password_hash
@@ -90,8 +91,11 @@ def home():
     return render_template("home.html")
 
 @app.route('/dashboard')
+@login_required
 def dashboard():
     return render_template("dashboard.html")
+
+
 
 @app.route('/user_reg', methods = ['GET', 'POST'])
 def register():
@@ -128,6 +132,10 @@ def user_detail():
 
 @app.route('/updateuser/<int:user_id>', methods =['POST', 'GET'])
 def updateuser(user_id):
+    if current_user.user_id != user_id:
+        flash("You are not authorized to update this user.", "danger")
+        return redirect(url_for('userdash'))
+    
     register_user = user_register.query.filter_by(user_id=user_id).first()
     if request.method=="POST":
         name = request.form['name']
@@ -144,7 +152,7 @@ def updateuser(user_id):
         # db.session.add(register_user)
         db.session.commit()
         flash("User updated successfully!", "Success")
-        return redirect('/userdetail')
+        return redirect('/userdash')
     # register_user = user_register.query.filter_by(user_id=user_id).first()
     return render_template('updateuser.html', register_user=register_user)
 
@@ -155,6 +163,19 @@ def delete_userdata(user_id):
     db.session.commit()
     return redirect('/userdetail')
 
+@app.route('/userdash')
+@login_required
+def userdash():
+    return render_template("userdash.html",user=current_user)
+
+##Only Login user can access the other data
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'user_id' not in session and not current_user.is_authenticated:
+            return redirect(url_for('user_login'))  # Correct endpoint name
+        return f(*args, **kwargs)
+    return decorated_function
 
 
 
