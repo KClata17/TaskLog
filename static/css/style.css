@@ -1,3 +1,8 @@
+body {
+  background: url('/static/images/white.jpg') ;
+  font-family: 'Segoe UI', sans-serif;
+  backdrop-filter: blur(10px);
+}
 nav{
     background-color: linear-gradient(to right, lightblue, pink);
     color: black;
@@ -12,15 +17,21 @@ nav{
 
 
 .navbar-brand{
+    font-weight: bold;
     color: white;
     font: italic small-caps bold 18px "Times New Roman", serif;
 }
+
 .nav-item{
     
     font-style: italic;
     font-size: 16px;
     font-family: 'Poppins', sans-serif;
     border-radius: 10px;
+}
+
+.container {
+  margin-top: 10px;
 }
 
 .login-box{
@@ -78,43 +89,70 @@ nav{
 
 
 .hero {
-    background: linear-gradient(to right, #e9eff7, #898a8b);
+  background: url('/static/images/.jpg') ;
     background-size: cover;
     color: black;
-    padding: 100px 0;
+    padding: 120px 0;
     position: relative;
+    
   }
+  
   .lead{
     color: black;
   }
 
   .hero-overlay {
-    background-color: rgba(216, 199, 223, 0.85);
-    padding: 50px 0;
+    background: url('/static/images/rey.jpg') ;
+    padding: 60px 0;
     color: black;
+    border-radius: 10px;
   }
 
   .form-control {
     border-radius: 10px;
   }
+  .form-box input {
+    border-radius: 10px;
+  }
 
   .form-box {
-    background-color: gray;
+    background: url('/static/images/newback.jpg') ;
     padding: 30px;
-    border-radius: 16px;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+    border-radius: 12px;
+    box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+    position: relative;
+    overflow: hidden;
+    color: black;
   }
+  .form-box::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(252, 252, 252, 0.5); /* dark overlay for contrast */
+    z-index: 1;
+    border-radius: 12px;
+    backdrop-filter: blur(5px);
+  }
+  
+  .form-box * {
+    position: relative;
+    z-index: 2;
+  }
+
+
 
   .features {
     padding: 60px 0;
     background-color: #f8f9fa;
   }
   .btn-success {
-    border-radius: 8px;
-    background-color: #28a745;
-    border: none;
-    font-weight: 600;
-    margin: center;
+    border-radius: 50px;
+    padding: 10px 25px;
+    transition: 0.3s;
+  }
+  .btn-success:hover {
+    background-color: #218838;
   }
 
   .btn-outline-primary {
@@ -132,6 +170,25 @@ nav{
     font-weight: 700;
     margin-bottom: 10px;
   }
+  .features .icon {
+    font-size: 40px;
+    margin-bottom: 15px;
+  }
+  .features .card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+  }
+  .features .card:hover {
+    transform: translateY(-5px);
+  }
+  .btn-custom {
+    border-radius: 50px;
+    padding: 10px 30px;
+    font-weight: 600;
+  }
+
 
   .md-3 {
     padding: 20px 0 10px 0;
@@ -158,4 +215,16 @@ nav{
     text-align: center;
     font-weight: bold;
     font-style: italic;
+  }
+
+  h1 {
+    font-size: 3rem;
+    font-weight: 700;
+  }
+  p.lead {
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+  }
+  .body{
+    font-family: 'Segoe UI', sans-serif;
   }
