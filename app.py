@@ -192,17 +192,7 @@ def user_login():
             print(f"Stored Hash: {user.password}")  # Debugging line
             print(f"Entered Password: {password}")  # Debugging line
             print(f"Check: {user.check_password(password)}")  # Debugging line
-    #     if user:
-    #         if user.check_password(password):
-    #             login_user(user)
-    #             flash("Login Successfyll!", "success")
-    #             return redirect(url_for('dashboard'))
-    #         else:
-    #             flash("Invalid Password!", "danger")
-                
-    #     else:
-    #         flash("Sorry! User not found.", "danger")
-    # return render_template('login.html')
+    
                 
         if user and user.check_password(password):
             login_user(user)
