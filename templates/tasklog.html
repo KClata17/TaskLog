@@ -3,8 +3,7 @@
 
 <div class="container my-5">
   <div class="row align-items-center">
-    <!-- Left Side: Content & Spinners -->
-    <!-- Left Side: Enhanced Content -->
+    <!-- Left Side: Welcome Section -->
     <div class="col-md-6 text-center p-4" style="background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-radius: 1rem;">
       <h2 class="mb-3 fw-bold text-success">Welcome to TaskLog! ✅</h2>
       <p class="lead">Stay organized. Stay productive.</p>
@@ -21,40 +20,41 @@
       </blockquote>
 
       <p class="text-muted mt-4">Your productivity partner – anytime, anywhere.</p>
-    
-
       <p class="text-muted">Fast, secure, and user-friendly experience!</p>
     </div>
 
-<div class="col-md-6">
-  <div class ="register-box shadow-lg p-4 bg-white rounded" >
-    <h2 class= "text-center"> Task-Log Form</h2>
-    <form action ="/tasklog" method = "POST">
+    <!-- Right Side: Form -->
+    <div class="col-md-6">
+      <div class="register-box shadow-lg p-4 bg-white rounded">
+        <h2 class="text-center mb-4">Task-Log Form</h2>
+        <form action="/tasklog" method="POST">
+          <div class="mb-3">
+            <label for="title" class="form-label">Title:</label>
+            <input type="text" class="form-control" name="title" id="title" placeholder="Type your title name here!" required>
+          </div>
 
-    <div class="mb-3">
-        <label for="title" class="form-label">Title: </label>
-        <input type="text" class="form-control" name="title" id="title" placeholder="Type your title name here!">
-      </div>
-      <div class="mb-3">
-        <label for="desc" class="form-label">Description:  </label>
-        <textarea class="form-control" name= "description" id="description" rows="3"></textarea>
-      </div>
+          <div class="mb-3">
+            <label for="description" class="form-label">Description:</label>
+            <textarea class="form-control" name="description" id="description" rows="3" required></textarea>
+          </div>
 
-      <div class ="mb-3">
-        <label for "category" class = "form-label"> Category: </label>
-        <select class = "form-control" name ="category" id="category" required>
-          <option value =""> -- Select Category --</option>
-          <option value="Personal">Personal</option>
-          <option value ="Work"> Work</option>
-        </select>
-      </div>
-      <div class="text-center mt-4">
+          <div class="mb-3">
+            <label for="category" class="form-label">Category:</label>
+            <select class="form-control" name="category" id="category" required>
+              <option value="">-- Select Category --</option>
+              <option value="Personal">Personal</option>
+              <option value="Work">Work</option>
+            </select>
+          </div>
 
-      <button type="submit" class="btn btn-outline-success"> submit</button>
-      <a href='/dashboard' class ="btn btn-danger"> Exit</a>
+          <div class="text-center mt-4">
+            <button type="submit" class="btn btn-outline-success">Submit</button>
+            <a href="/dashboard" class="btn btn-danger ms-2">Exit</a>
+          </div>
+        </form>
       </div>
-    </form>
+    </div>
   </div>
+</div>
 
-
-{% endblock body %}
+{% endblock %}
